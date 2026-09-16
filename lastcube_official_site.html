@@ -1,0 +1,3936 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07111f">
+    <meta name="description" content="LastCube — Minecraft Bedrock сервер. Анархия, PvP, команды, экономика и уникальные игровые механики.">
+    <title>LastCube — Minecraft Bedrock</title>
+
+    <style>
+        /* =========================================================
+           LASTCUBE
+           Single-file landing page
+           HTML + CSS + JS
+           ========================================================= */
+
+        :root {
+            --bg: #f4f9ff;
+            --bg-soft: #edf6ff;
+            --white: #ffffff;
+            --ink: #081522;
+            --muted: #63778c;
+
+            --blue-950: #04101d;
+            --blue-900: #061a2f;
+            --blue-800: #082b4b;
+            --blue-700: #0b4778;
+            --blue-600: #0878c9;
+            --blue-500: #1598ef;
+            --blue-400: #45b8ff;
+            --blue-300: #91d7ff;
+            --blue-200: #cceeff;
+
+            --line: rgba(10, 76, 125, .12);
+            --shadow: 0 24px 70px rgba(8, 70, 115, .14);
+            --radius-xl: 32px;
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --container: 1180px;
+
+            --ease: cubic-bezier(.2,.8,.2,1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(76, 188, 255, .12), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(0, 128, 255, .08), transparent 30%),
+                var(--bg);
+            color: var(--ink);
+            font-family:
+                Inter,
+                ui-sans-serif,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+            line-height: 1.5;
+        }
+
+        body::selection {
+            background: var(--blue-500);
+            color: #fff;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(calc(100% - 40px), var(--container));
+            margin-inline: auto;
+        }
+
+        /* =========================================================
+           ICONS
+           ========================================================= */
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            flex: 0 0 auto;
+        }
+
+        .icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .header {
+            position: fixed;
+            z-index: 1000;
+            top: 18px;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+        }
+
+        .nav {
+            pointer-events: auto;
+            height: 68px;
+            padding: 8px 10px 8px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border: 1px solid rgba(255,255,255,.65);
+            background: rgba(255,255,255,.78);
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+
+            box-shadow:
+                0 12px 45px rgba(4, 52, 91, .11),
+                inset 0 1px 0 rgba(255,255,255,.8);
+
+            border-radius: 22px;
+            transition: .35s var(--ease);
+        }
+
+        .header.scrolled .nav {
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 14px 50px rgba(4, 52, 91, .15);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            letter-spacing: -.04em;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            background:
+                linear-gradient(145deg, #1ea8ff, #0766b2);
+            border-radius: 13px;
+            box-shadow:
+                0 8px 24px rgba(4, 125, 215, .3),
+                inset 0 1px 0 rgba(255,255,255,.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-mark img,
+        .mini-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-name {
+            font-size: 18px;
+        }
+
+        .brand-sub {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 13px;
+            color: #536b80;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--blue-700);
+            background: #edf7ff;
+        }
+
+        .nav-shop {
+            height: 48px;
+            padding: 0 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            border-radius: 15px;
+            color: #fff;
+            background: var(--blue-700);
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 8px 22px rgba(7, 88, 150, .25);
+            transition: .25s var(--ease);
+        }
+
+        .nav-shop:hover {
+            transform: translateY(-2px);
+            background: var(--blue-600);
+            box-shadow: 0 12px 28px rgba(7, 88, 150, .3);
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 14px;
+            color: var(--blue-800);
+            background: #edf7ff;
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           HERO
+           ========================================================= */
+
+        .hero {
+            min-height: 820px;
+            padding: 160px 0 90px;
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    180deg,
+                    #07192b 0%,
+                    #092744 55%,
+                    #eaf6ff 100%
+                );
+            color: #fff;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 620px;
+            height: 620px;
+            border-radius: 50%;
+            right: -160px;
+            top: 60px;
+            background: rgba(30, 164, 255, .17);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .hero-glow.two {
+            width: 400px;
+            height: 400px;
+            left: -160px;
+            bottom: 50px;
+            background: rgba(73, 187, 255, .1);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            align-items: center;
+            gap: 65px;
+        }
+
+        .hero-title {
+            max-width: 720px;
+            font-size: clamp(58px, 8vw, 104px);
+            line-height: .88;
+            letter-spacing: -.075em;
+            font-weight: 950;
+        }
+
+        .hero-title span {
+            display: block;
+            background: linear-gradient(120deg, #fff 20%, #8dd8ff 85%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            max-width: 570px;
+            margin-top: 27px;
+            color: #abc4d9;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            margin-top: 35px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            min-height: 54px;
+            padding: 0 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border: 1px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .25s var(--ease);
+        }
+
+        .btn-primary {
+            color: #06345a;
+            background: #fff;
+            box-shadow: 0 14px 35px rgba(0,0,0,.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(0,0,0,.2);
+        }
+
+        .btn-secondary {
+            color: #fff;
+            border-color: rgba(255,255,255,.14);
+            background: rgba(255,255,255,.06);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,.11);
+            border-color: rgba(255,255,255,.22);
+        }
+
+        .hero-note {
+            margin-top: 19px;
+            color: #7696af;
+            font-size: 12px;
+        }
+
+        /* Hero server card */
+
+        .server-card-wrap {
+            position: relative;
+            top: -38px;
+        }
+
+        .cube-scene {
+            min-height: 490px;
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        .cube-orbit {
+            display: none;
+            position: absolute;
+            width: 390px;
+            height: 390px;
+            border: 1px solid rgba(129,216,255,.18);
+            border-radius: 50%;
+            transform: rotateX(67deg) rotateZ(-14deg);
+        }
+
+        .cube-orbit::before,
+        .cube-orbit::after {
+            content: "";
+            position: absolute;
+            inset: 38px;
+            border: 1px solid rgba(129,216,255,.09);
+            border-radius: 50%;
+        }
+
+        .cube-orbit::after {
+            inset: 78px;
+        }
+
+        .hero-logo {
+            width: 225px;
+            height: 225px;
+            position: relative;
+            object-fit: cover;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            mix-blend-mode: lighten;
+            filter: drop-shadow(0 40px 45px rgba(0,0,0,.3));
+            animation: logoFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%,100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .server-mini {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 4px;
+            width: min(100%, 430px);
+            margin: auto;
+            padding: 18px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(5,22,38,.72);
+            backdrop-filter: blur(20px);
+            border-radius: 22px;
+            box-shadow: 0 25px 60px rgba(0,0,0,.22);
+        }
+
+        .server-mini-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .server-mini-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-icon {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #0c5f98;
+            overflow: hidden;
+        }
+
+        .mini-title {
+            font-weight: 850;
+        }
+
+        .mini-subtitle {
+            color: #7291aa;
+            font-size: 11px;
+        }
+
+        .server-ip {
+            margin-top: 14px;
+            padding: 12px 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 13px;
+            background: rgba(255,255,255,.035);
+        }
+
+        .server-ip code {
+            color: #d7efff;
+            font-size: 12px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        .copy-mini {
+            border: 0;
+            background: transparent;
+            color: #77c9f7;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           SECTIONS
+           ========================================================= */
+
+        section {
+            position: relative;
+        }
+
+        .section {
+            padding: 115px 0;
+        }
+
+        .section-header {
+            max-width: 700px;
+            margin-bottom: 52px;
+        }
+
+        .section-kicker {
+            margin-bottom: 12px;
+            color: var(--blue-600);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: .98;
+            letter-spacing: -.055em;
+            font-weight: 950;
+        }
+
+        .section-description {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* =========================================================
+           FEATURES
+           ========================================================= */
+
+        .features {
+            color: #fff;
+            background: var(--blue-950);
+            display: none;
+        }
+
+        .features .section-header,
+        .steps .section-header {
+            max-width: 680px;
+            margin-inline: auto;
+            text-align: center;
+        }
+
+        .features .section-kicker {
+            display: none;
+        }
+
+        .features .section-description {
+            color: #91a6b8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            column-gap: 55px;
+            row-gap: 46px;
+        }
+
+        .feature {
+            min-height: 0;
+            padding: 0;
+            position: relative;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            transition: .3s var(--ease);
+        }
+
+        .feature:hover {
+            transform: translateY(-3px);
+        }
+
+        .feature::after {
+            display: none;
+        }
+
+        .feature-icon {
+            display: none;
+        }
+
+        .feature h3 {
+            color: #fff;
+            font-size: 16px;
+            letter-spacing: -.025em;
+            font-weight: 900;
+        }
+
+        .feature p {
+            max-width: 290px;
+            margin-top: 8px;
+            color: #91a0af;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        /* =========================================================
+           MODES
+           ========================================================= */
+
+        .modes {
+            background:
+                radial-gradient(circle at 80% 20%, rgba(34,158,235,.09), transparent 28%),
+                #edf7ff;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 14px;
+        }
+
+        .mode {
+            min-height: 355px;
+            padding: 24px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #fff;
+            background:
+                linear-gradient(160deg,#0a3557,#061a2c);
+            border: 1px solid rgba(90,191,244,.15);
+            border-radius: 25px;
+            transition: .3s var(--ease);
+        }
+
+        .mode:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 55px rgba(4,49,82,.2);
+        }
+
+        .mode-number {
+            color: #6fcaff;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .1em;
+        }
+
+        .mode-visual {
+            height: 115px;
+            margin: 20px 0;
+            position: relative;
+            display: grid;
+            place-items: center;
+        }
+
+        .mode-cube {
+            width: 75px;
+            height: 75px;
+            border-radius: 13px;
+            border: 1px solid rgba(255,255,255,.35);
+            background: linear-gradient(145deg,#58c8ff,#07609b);
+            transform: rotate(45deg);
+            box-shadow: 0 18px 35px rgba(0,0,0,.2);
+        }
+
+        .mode-visual span {
+            position: absolute;
+            font-size: 27px;
+            font-weight: 950;
+            letter-spacing: -.08em;
+        }
+
+        .mode h3 {
+            font-size: 25px;
+            letter-spacing: -.045em;
+        }
+
+        .mode p {
+            margin-top: 7px;
+            color: #8da9bf;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .mode-rule {
+            margin-top: auto;
+            padding-top: 17px;
+            color: #65c8ff;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .modes {
+            color: #fff;
+            background: var(--blue-950);
+            display: none;
+        }
+
+        .modes .section-header {
+            max-width: none;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .modes .section-description {
+            max-width: 520px;
+            color: #91a6b8;
+        }
+
+        .modes-live {
+            flex: 0 0 auto;
+            padding-bottom: 8px;
+            color: #73d6ff;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .modes-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .mode {
+            min-height: 620px;
+            padding: 16px;
+            background: #101a21;
+            border: 1px solid rgba(145,215,255,.1);
+            border-radius: 24px;
+        }
+
+        .mode:hover {
+            border-color: rgba(115,214,255,.28);
+            box-shadow: 0 25px 55px rgba(0,0,0,.22);
+        }
+
+        .mode-visual {
+            height: 255px;
+            margin: 0 0 24px;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #08131c;
+        }
+
+        .mode-image {
+            width: 100%;
+            height: 100%;
+            display: none;
+            object-fit: cover;
+        }
+
+        .mode-image.loaded {
+            display: block;
+        }
+
+        .mode-image-fallback {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(145,215,255,.3);
+            border-radius: 28px;
+            color: #fff;
+            background: linear-gradient(145deg,#1598e7,#0a5f98);
+            box-shadow: 0 18px 35px rgba(0,0,0,.25);
+            font-size: 34px;
+            font-weight: 950;
+            letter-spacing: -.08em;
+        }
+
+        .mode-image.loaded + .mode-image-fallback {
+            display: none;
+        }
+
+        .mode-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .mode h3 {
+            font-size: 27px;
+            letter-spacing: -.045em;
+        }
+
+        .mode-status {
+            color: #73d6ff;
+            font-size: 12px;
+            font-weight: 850;
+        }
+
+        .mode.is-soon .mode-status {
+            color: #8293a1;
+        }
+
+        .mode p {
+            min-height: 62px;
+            margin-top: 10px;
+            color: #9eafbd;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .mode-more {
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 0;
+            color: #fff;
+            background: transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .mode-more .icon {
+            width: 15px;
+            height: 15px;
+            transition: transform .25s var(--ease);
+        }
+
+        .mode.expanded .mode-more .icon {
+            transform: rotate(180deg);
+        }
+
+        .mode-extra {
+            display: none;
+            min-height: 0 !important;
+            margin-top: 10px !important;
+            color: #8293a1 !important;
+        }
+
+        .mode.expanded .mode-extra {
+            display: block;
+        }
+
+        .mode-cta {
+            width: 100%;
+            min-height: 49px;
+            margin-top: auto;
+            padding: 0 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 13px;
+            color: #062039;
+            background: #73d6ff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .mode-cta:disabled {
+            color: #687982;
+            background: #26343a;
+            cursor: not-allowed;
+        }
+
+        /* =========================================================
+           GAMEPLAY
+           ========================================================= */
+
+        .gameplay {
+            background: #fff;
+        }
+
+        .gameplay-grid {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .bullet-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .bullet {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+        }
+
+        .bullet-check {
+            width: 24px;
+            height: 24px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            color: #0876c3;
+            background: #e7f5ff;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .bullet-check .icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .bullet strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .bullet span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .dashboard {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: #f6fbff;
+            box-shadow: var(--shadow);
+        }
+
+        .dash-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dash-title {
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .dash-meta {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .dash-main {
+            padding: 28px;
+            border-radius: 21px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 90% 10%, rgba(55,191,255,.3), transparent 35%),
+                linear-gradient(145deg,#092d4d,#061827);
+        }
+
+        .dash-main-label {
+            color: #77a9c9;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+        }
+
+        .dash-online {
+            margin-top: 7px;
+            font-size: 48px;
+            line-height: 1;
+            font-weight: 950;
+            letter-spacing: -.06em;
+        }
+
+        .dash-online span {
+            color: #78cdf8;
+            font-size: 14px;
+            letter-spacing: 0;
+        }
+
+        .bar {
+            height: 8px;
+            margin-top: 25px;
+            overflow: hidden;
+            border-radius: 100px;
+            background: rgba(255,255,255,.08);
+        }
+
+        .bar i {
+            display: block;
+            width: 68%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg,#0c8cda,#73d6ff);
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dash-box {
+            padding: 17px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+        }
+
+        .dash-box small {
+            display: block;
+            color: #8194a6;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .dash-box strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           HOW TO PLAY
+           ========================================================= */
+
+        .steps {
+            background: var(--bg);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 50px;
+        }
+
+        .step {
+            padding: 0;
+            border: 0;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .step-number {
+            color: var(--blue-600);
+            width: auto;
+            height: auto;
+            display: block;
+            margin-bottom: 16px;
+            border-radius: 0;
+            background: transparent;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .12em;
+        }
+
+        .step h3 {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .step p {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .connect-box {
+            margin-top: 18px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .connect-info small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .connect-info code {
+            display: block;
+            margin-top: 4px;
+            color: var(--blue-700);
+            font-family: ui-monospace, monospace;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           STORE CTA
+           ========================================================= */
+
+        .store {
+            padding: 95px 0;
+            background: #fff;
+        }
+
+        .store-card {
+            min-height: 350px;
+            padding: 65px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            border-radius: 34px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 90% 20%, rgba(84,204,255,.28), transparent 32%),
+                linear-gradient(125deg,#06223b,#0a5485);
+            box-shadow: 0 30px 75px rgba(5,69,110,.22);
+        }
+
+        .store-card::before {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            right: -130px;
+            bottom: -220px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 50%;
+        }
+
+        .store-copy {
+            position: relative;
+            z-index: 2;
+            max-width: 620px;
+        }
+
+        .store-copy .section-kicker {
+            color: #73cfff;
+        }
+
+        .store-copy h2 {
+            font-size: clamp(37px,5vw,61px);
+            line-height: .98;
+            letter-spacing: -.06em;
+            font-weight: 950;
+        }
+
+        .store-copy p {
+            max-width: 530px;
+            margin-top: 17px;
+            color: #9ec1d9;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .store-action {
+            position: relative;
+            z-index: 2;
+            flex: 0 0 auto;
+        }
+
+        .store-action .btn {
+            min-width: 180px;
+        }
+
+        /* =========================================================
+           COMMUNITY
+           ========================================================= */
+
+        .community {
+            background: #f4faff;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 15px;
+        }
+
+        .social {
+            padding: 23px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--line);
+            border-radius: 21px;
+            background: #fff;
+            transition: .25s var(--ease);
+        }
+
+        .social:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 45px rgba(4,70,113,.1);
+        }
+
+        .social-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            color: #fff;
+            background: var(--blue-700);
+        }
+
+        .social-icon .icon {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            margin: 0;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        .social-icon .icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .social strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .social span {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .play-hub {
+            background: #fff;
+        }
+
+        .gameplay,
+        .steps,
+        .community {
+            display: none;
+        }
+
+        .play-hub-grid {
+            display: grid;
+            grid-template-columns: .72fr 1.28fr;
+            align-items: start;
+            gap: 18px;
+        }
+
+        .play-social-panel {
+            position: sticky;
+            top: 105px;
+            padding: 28px;
+            color: var(--ink);
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: 0 18px 45px rgba(0,0,0,.08);
+        }
+
+        .play-social-panel .section-kicker {
+            color: #000;
+        }
+
+        .play-social-panel h2 {
+            max-width: 300px;
+            color: #000;
+            font-size: clamp(31px, 4vw, 48px);
+            line-height: .98;
+            letter-spacing: -.055em;
+        }
+
+        .play-social-panel > p {
+            margin-top: 15px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .play-social-list {
+            margin-top: 27px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .play-social-link {
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+            transition: .25s var(--ease);
+        }
+
+        .play-social-link:hover {
+            transform: translateY(-2px);
+            border-color: #000;
+            background: #fafafa;
+        }
+
+        .play-social-icon {
+            width: 37px;
+            height: 37px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            border-radius: 11px;
+            color: #000;
+            background: #fff;
+            border: 0;
+        }
+
+        .play-social-icon .icon {
+            width: 19px;
+            height: 19px;
+        }
+
+        .play-social-link strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .play-social-link span {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .play-social-link > .play-social-icon {
+            display: grid;
+            margin: 0;
+            color: #000;
+            font-size: inherit;
+        }
+
+        .play-tools {
+            display: grid;
+            gap: 18px;
+        }
+
+        .guide-card {
+            padding: 26px;
+            color: var(--ink);
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: 0 18px 45px rgba(0,0,0,.08);
+        }
+
+        .guide-card .section-kicker {
+            color: #000;
+        }
+
+        .guide-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .guide-head h2 {
+            color: #000;
+            font-size: clamp(28px, 3vw, 40px);
+            line-height: 1;
+            letter-spacing: -.05em;
+        }
+
+        .guide-head p {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .guide-mark {
+            width: 64px;
+            height: 64px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 0;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .guide-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .guide-steps {
+            margin-top: 27px;
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+        }
+
+        .guide-step {
+            min-width: 0;
+        }
+
+        .guide-step-media {
+            height: 112px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 0;
+            background: transparent;
+            border: 0;
+        }
+
+        .guide-step-media img {
+            width: 100%;
+            height: 100%;
+            display: none;
+            object-fit: cover;
+        }
+
+        .guide-step-media img.loaded {
+            display: block;
+        }
+
+        .guide-step-media span {
+            color: #000;
+            font-size: 22px;
+            font-weight: 950;
+        }
+
+        .guide-step-media img.loaded + span {
+            display: none;
+        }
+
+        .guide-step h3 {
+            margin-top: 13px;
+            color: var(--ink);
+            font-size: 15px;
+        }
+
+        .guide-step p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .play-connect {
+            margin-top: 24px;
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            border-top: 1px solid #e4e4e4;
+        }
+
+        .play-connect .connect-info code {
+            color: #000;
+        }
+
+        .play-tools .dashboard {
+            color: var(--ink);
+            background: #fff;
+            border-color: var(--line);
+            box-shadow: 0 18px 45px rgba(0,0,0,.08);
+        }
+
+        .play-tools .dash-title {
+            color: var(--ink);
+        }
+
+        .play-tools .dash-meta {
+            color: var(--muted);
+        }
+
+        .play-tools .dash-main {
+            color: var(--ink);
+            background: #f2f2f2;
+        }
+
+        .play-tools .dash-main-label {
+            color: var(--muted);
+        }
+
+        .play-tools .dash-online span {
+            color: #000;
+        }
+
+        .play-tools .bar {
+            background: #dedede;
+        }
+
+        .play-tools .dash-box {
+            border-color: var(--line);
+            background: #fff;
+        }
+
+        .play-tools .dash-box small {
+            color: #666;
+        }
+
+        .play-tools .dash-box strong {
+            color: var(--ink);
+        }
+
+        .dash-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .dash-brand img {
+            width: 34px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* =========================================================
+           FAQ
+           ========================================================= */
+
+        .faq {
+            background: #fff;
+        }
+
+        .faq-list {
+            max-width: 820px;
+            margin: auto;
+            display: grid;
+            gap: 9px;
+        }
+
+        .faq-item {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 20px;
+            border: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            color: var(--ink);
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 850;
+        }
+
+        .faq-plus {
+            width: 29px;
+            height: 29px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            color: var(--blue-700);
+            background: #edf7ff;
+            border-radius: 9px;
+            font-size: 18px;
+            transition: .25s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s var(--ease);
+        }
+
+        .faq-answer p {
+            padding: 0 20px 20px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-plus {
+            transform: rotate(45deg);
+        }
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .footer {
+            padding: 50px 0 30px;
+            color: #9ab4c8;
+            background: #061522;
+        }
+
+        .footer-main {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .footer-brand {
+            max-width: 330px;
+        }
+
+        .footer-brand .brand {
+            color: #fff;
+        }
+
+        .footer-description {
+            margin-top: 14px;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 45px;
+        }
+
+        .footer-col strong {
+            display: block;
+            margin-bottom: 13px;
+            color: #fff;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .footer-col a {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            transition: .2s ease;
+        }
+
+        .footer-col a:hover {
+            color: #78ccf8;
+        }
+
+        .footer-bottom {
+            margin-top: 45px;
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,.07);
+            font-size: 10px;
+        }
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+
+        .toast {
+            position: fixed;
+            z-index: 2000;
+            left: 50%;
+            bottom: 25px;
+            padding: 12px 17px;
+            transform: translate(-50%, 100px);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 13px;
+            color: #fff;
+            background: rgba(4,20,34,.94);
+            box-shadow: 0 18px 50px rgba(0,0,0,.25);
+            font-size: 12px;
+            font-weight: 750;
+            opacity: 0;
+            transition: .35s var(--ease);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* =========================================================
+           REVEAL ANIMATION
+           ========================================================= */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition:
+                opacity .7s var(--ease),
+                transform .7s var(--ease);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 1000px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .server-card-wrap {
+                top: 0;
+            }
+
+            .hero {
+                min-height: auto;
+            }
+
+            .hero-copy {
+                max-width: 750px;
+            }
+
+            .cube-scene {
+                min-height: 450px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .modes-grid {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .gameplay-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(3,1fr);
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .container {
+                width: min(calc(100% - 28px), var(--container));
+            }
+
+            .header {
+                top: 10px;
+            }
+
+            .nav {
+                height: 61px;
+                padding-left: 12px;
+                border-radius: 18px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+            }
+
+            .brand-sub {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 68px;
+                left: 0;
+                right: 0;
+                padding: 10px;
+                flex-direction: column;
+                align-items: stretch;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                background: rgba(255,255,255,.96);
+                box-shadow: 0 20px 50px rgba(5,50,83,.15);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-link {
+                padding: 13px;
+            }
+
+            .nav-shop {
+                justify-content: center;
+            }
+
+            .mobile-toggle {
+                display: grid;
+                place-items: center;
+            }
+
+            .hero {
+                padding-top: 125px;
+                padding-bottom: 55px;
+            }
+
+            .hero-title {
+                font-size: clamp(55px,17vw,86px);
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .hero-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .cube-scene {
+                min-height: 420px;
+            }
+
+            .cube-orbit {
+                width: 310px;
+                height: 310px;
+            }
+
+            .server-mini {
+                width: calc(100% - 20px);
+            }
+
+            .section {
+                padding: 80px 0;
+            }
+
+            .section-header {
+                margin-bottom: 35px;
+            }
+
+            .features-grid,
+            .modes-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature {
+                min-height: auto;
+            }
+
+            .mode {
+                min-height: 310px;
+            }
+
+            .store {
+                padding: 70px 0;
+            }
+
+            .store-card {
+                padding: 38px 25px;
+                display: block;
+            }
+
+            .store-action {
+                margin-top: 30px;
+            }
+
+            .store-action .btn {
+                width: 100%;
+            }
+
+            .connect-box {
+                display: block;
+            }
+
+            .connect-box .btn {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .footer-main {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                gap: 25px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .hero-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .cube-scene {
+                min-height: 390px;
+            }
+
+            .cube-orbit {
+                width: 275px;
+                height: 275px;
+            }
+
+            .server-mini {
+                padding: 14px;
+            }
+
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .modes .section-header {
+                display: block;
+            }
+
+            .modes-live {
+                margin-top: 18px;
+                padding-bottom: 0;
+            }
+
+            .play-hub-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .play-social-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .mode {
+                min-height: 0;
+            }
+
+            .mode-visual {
+                height: 220px;
+            }
+
+            .guide-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-step-media {
+                height: 150px;
+            }
+
+            .play-connect {
+                display: block;
+            }
+
+            .play-connect .btn {
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+
+        /* Compact navigation and tablet layout. Desktop rules above remain unchanged. */
+        @media (max-width: 1100px) {
+            .nav {
+                height: 64px;
+                padding-left: 14px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 74px;
+                left: 0;
+                right: 0;
+                padding: 10px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                background: rgba(255, 255, 255, .97);
+                box-shadow: 0 20px 50px rgba(5, 50, 83, .15);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: 12px 14px;
+            }
+
+            .mobile-toggle {
+                display: grid;
+                place-items: center;
+            }
+
+            .hero-copy {
+                max-width: 780px;
+            }
+
+            .play-social-panel {
+                position: static;
+            }
+        }
+
+        @media (min-width: 761px) and (max-width: 1100px) {
+            .container {
+                width: min(calc(100% - 48px), var(--container));
+            }
+
+            .hero {
+                padding-top: 145px;
+                padding-bottom: 70px;
+            }
+
+            .hero-inner {
+                gap: 32px;
+            }
+
+            .hero-logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            .cube-scene {
+                min-height: 420px;
+            }
+
+            .server-mini {
+                width: min(100%, 430px);
+            }
+
+            .play-hub-grid {
+                grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+                align-items: start;
+            }
+
+            .play-social-panel,
+            .guide-card,
+            .play-tools .dashboard {
+                padding: 24px;
+            }
+
+            .guide-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-step-media {
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .container {
+                width: min(calc(100% - 28px), var(--container));
+            }
+
+            .nav {
+                height: 58px;
+                padding: 6px 8px 6px 10px;
+                border-radius: 16px;
+            }
+
+            .nav-links {
+                top: 66px;
+            }
+
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .mobile-toggle {
+                width: 42px;
+                height: 42px;
+            }
+
+            .hero {
+                padding: 112px 0 48px;
+            }
+
+            .hero-inner {
+                gap: 30px;
+            }
+
+            .hero-title {
+                font-size: clamp(49px, 16vw, 78px);
+            }
+
+            .hero-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .hero-actions {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 26px;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .hero-logo {
+                width: 170px;
+                height: 170px;
+            }
+
+            .cube-scene {
+                min-height: 350px;
+            }
+
+            .server-mini {
+                bottom: 0;
+                width: calc(100% - 8px);
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .server-mini-top {
+                gap: 10px;
+            }
+
+            .mini-title {
+                font-size: 14px;
+            }
+
+            .server-ip {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .server-ip code {
+                max-width: 100%;
+                font-size: 11px;
+                overflow-wrap: anywhere;
+            }
+
+            .copy-mini {
+                width: 100%;
+                padding-top: 4px;
+                text-align: left;
+            }
+
+            .play-hub {
+                padding: 64px 0;
+            }
+
+            .play-hub-grid {
+                gap: 14px;
+            }
+
+            .play-social-panel,
+            .guide-card,
+            .play-tools .dashboard {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .play-social-panel h2 {
+                font-size: 34px;
+            }
+
+            .play-social-list {
+                margin-top: 20px;
+            }
+
+            .guide-head {
+                align-items: flex-start;
+            }
+
+            .guide-head h2 {
+                font-size: 30px;
+            }
+
+            .guide-mark {
+                width: 52px;
+                height: 52px;
+            }
+
+            .guide-steps {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .guide-step-media {
+                height: 145px;
+            }
+
+            .play-connect {
+                display: block;
+                padding-top: 16px;
+            }
+
+            .play-connect .btn {
+                width: 100%;
+                min-height: 48px;
+            }
+
+            .play-tools .dash-head {
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .play-tools .dash-main {
+                padding: 22px;
+            }
+
+            .dash-online {
+                font-size: 40px;
+            }
+
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dash-box {
+                padding: 14px;
+            }
+
+            .footer-main {
+                gap: 30px;
+            }
+
+            .footer-links {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+
+            .footer-bottom {
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .brand-name {
+                font-size: 15px;
+            }
+
+            .hero-logo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .cube-scene {
+                min-height: 320px;
+            }
+
+            .play-social-panel,
+            .guide-card,
+            .play-tools .dashboard {
+                padding: 17px;
+            }
+
+            .guide-head {
+                gap: 10px;
+            }
+
+            .guide-mark {
+                width: 45px;
+                height: 45px;
+            }
+
+            .play-tools .dash-head {
+                display: block;
+            }
+
+            .play-tools .dash-meta {
+                margin-top: 6px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+
+                <a href="#top" class="brand">
+                    <span class="brand-mark">
+                        <img src="logo.png" alt="LastCube">
+                    </span>
+                    <span>
+                        <span class="brand-name">LastCube</span>
+                        <span class="brand-sub">Bedrock Network</span>
+                    </span>
+                </a>
+
+                <div class="nav-links" id="navLinks">
+                    <a href="#how" class="nav-link">Как играть</a>
+                    <a href="#community" class="nav-link">Сообщество</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+
+                    <a href="https://store.lastcube.net/"
+                       class="nav-shop"
+                       target="_blank"
+                       rel="noopener">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 8h14l-1 12H6L5 8Z"/>
+                                <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            </svg>
+                        </span>
+                        Магазин
+                    </a>
+                </div>
+
+                <button class="mobile-toggle"
+                        id="mobileToggle"
+                        aria-label="Открыть меню">
+                    <span class="icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 7h16"/>
+                            <path d="M4 12h16"/>
+                            <path d="M4 17h16"/>
+                        </svg>
+                    </span>
+                </button>
+
+            </nav>
+        </div>
+    </header>
+
+
+    <main id="top">
+
+        <!-- =====================================================
+             HERO
+             ===================================================== -->
+
+        <section class="hero">
+
+            <div class="hero-glow"></div>
+            <div class="hero-glow two"></div>
+
+            <div class="container">
+                <div class="hero-inner">
+
+                    <div class="hero-copy reveal">
+
+                        <h1 class="hero-title">
+                            LAST<span>CUBE</span>
+                        </h1>
+
+                        <p class="hero-description">
+                            Сервер Minecraft Bedrock, созданный для тех,
+                            кому мало обычного выживания. Анархия, PvP,
+                            экономика, команды и собственные механики —
+                            всё в одном мире.
+                        </p>
+
+                        <div class="hero-actions">
+
+                            <button class="btn btn-primary"
+                                    data-copy="play.lastcube.net:19132">
+                                <span class="icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8 7h10v10"/>
+                                        <path d="M18 7 6 19"/>
+                                        <path d="M6 7v10h10"/>
+                                    </svg>
+                                </span>
+                                Скопировать IP
+                            </button>
+
+                            <a href="#how" class="btn btn-secondary">
+                                Как начать играть
+                                <span class="icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 12h14"/>
+                                        <path d="m13 6 6 6-6 6"/>
+                                    </svg>
+                                </span>
+                            </a>
+
+                        </div>
+
+                        <div class="hero-note">
+                            Поддержка Minecraft Bedrock Edition
+                        </div>
+
+                    </div>
+
+
+                    <div class="server-card-wrap reveal">
+
+                        <div class="cube-scene">
+
+                            <div class="cube-orbit"></div>
+
+                            <img class="hero-logo"
+                                 src="logo.png"
+                                 alt="Логотип LastCube">
+
+                            <div class="server-mini">
+
+                                <div class="server-mini-top">
+
+                                    <div class="server-mini-name">
+                                        <div class="mini-icon">
+                                            <img src="logo.png" alt="">
+                                        </div>
+
+                                        <div>
+                                            <div class="mini-title">
+                                                LastCube
+                                            </div>
+                                            <div class="mini-subtitle">
+                                                Minecraft Bedrock
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="server-ip">
+                                    <code>play.lastcube.net:19132</code>
+
+                                    <button class="copy-mini"
+                                            data-copy="play.lastcube.net:19132">
+                                        КОПИРОВАТЬ
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             FEATURES
+             ===================================================== -->
+
+        <section class="section features" id="features">
+            <div class="container">
+
+                <div class="section-header reveal">
+                    <div class="section-kicker">Почему LastCube</div>
+
+                        <h2 class="section-title">
+                            Больше, чем<br>
+                            обычная анархия.
+                        </h2>
+
+                        <p class="section-description">
+                            Мы собрали механики, которые делают выживание
+                            интересным на протяжении всего сезона.
+                        </p>
+                </div>
+
+
+                <div class="features-grid">
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/>
+                                    <path d="m9 12 2 2 4-4"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Честная игра</h3>
+                        <p>
+                            Защита от читов и контроль нарушений,
+                            чтобы победа зависела от твоих навыков.
+                        </p>
+                    </article>
+
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2v20"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 1 0 0 7H15a3.5 3.5 0 1 1 0 7H6"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Экономика</h3>
+                        <p>
+                            Зарабатывай, торгуйся с игроками и развивай
+                            собственное состояние.
+                        </p>
+                    </article>
+
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M7 20h10"/>
+                                    <path d="M9 16h6"/>
+                                    <path d="M8 4h8l1 4-5 5-5-5 1-4Z"/>
+                                    <path d="M12 13v3"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Соревнования</h3>
+                        <p>
+                            Таблицы лидеров, достижения и события для тех,
+                            кто хочет быть первым.
+                        </p>
+                    </article>
+
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="9" cy="8" r="3"/>
+                                    <circle cx="17" cy="10" r="2.5"/>
+                                    <path d="M3 20c.4-3 2.4-5 6-5s5.6 2 6 5"/>
+                                    <path d="M14 15c3.5-.2 5.8 1.4 6 4"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Команды</h3>
+                        <p>
+                            Играй вместе с друзьями, создавай союзы
+                            и защищай свою территорию.
+                        </p>
+                    </article>
+
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 3 3 8l9 5 9-5-9-5Z"/>
+                                    <path d="m3 12 9 5 9-5"/>
+                                    <path d="m3 16 9 5 9-5"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Стабильность</h3>
+                        <p>
+                            Оптимизированная инфраструктура для комфортной
+                            игры без лишних задержек.
+                        </p>
+                    </article>
+
+
+                    <article class="feature reveal">
+                        <div class="feature-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 3v18"/>
+                                    <path d="M3 12h18"/>
+                                    <path d="m5 5 14 14"/>
+                                    <path d="M19 5 5 19"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <h3>Сезонные ивенты</h3>
+                        <p>
+                            Специальные активности и события, которые
+                            меняют привычный игровой процесс.
+                        </p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             MODES
+             ===================================================== -->
+
+        <section class="section modes" id="modes">
+            <div class="container">
+
+                <div class="section-header reveal">
+                    <div class="modes-intro">
+                        <div class="section-kicker">Игровые режимы</div>
+
+                    </div>
+
+                    <div class="modes-live" id="modesLiveCount">
+                        Статус обновляется
+                    </div>
+                </div>
+
+
+                <div class="modes-grid">
+
+                    <article class="mode is-live reveal">
+                        <div class="mode-visual">
+                            <img class="mode-image"
+                                 data-mode-image="anarchy"
+                                 alt="Анархия">
+                            <span class="mode-image-fallback">LC</span>
+                        </div>
+
+                        <div class="mode-head">
+                            <h3>Анархия</h3>
+                            <span class="mode-status">Доступно</span>
+                        </div>
+
+                        <p>
+                            Свобода без правил, риск на каждом шаге
+                            и мир, который игроки меняют сами.
+                        </p>
+
+                        <button class="mode-more" type="button" aria-expanded="false">
+                            <span class="mode-more-label">Показать больше</span>
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </span>
+                        </button>
+
+                        <p class="mode-extra">
+                            Создавай базу, объединяйся с игроками и защищай
+                            свои ресурсы в постоянной борьбе за территорию.
+                        </p>
+
+                        <a class="mode-cta" href="#how">Играть</a>
+                    </article>
+
+
+                    <article class="mode is-soon reveal">
+                        <div class="mode-visual">
+                            <img class="mode-image"
+                                 data-mode-image="meatgrinder"
+                                 alt="Мясорубка">
+                            <span class="mode-image-fallback">LC</span>
+                        </div>
+
+                        <div class="mode-head">
+                            <h3>Мясорубка</h3>
+                            <span class="mode-status">Скоро</span>
+                        </div>
+
+                        <p>
+                            Жёсткий PvP-режим для тех, кто любит
+                            быстрые решения и постоянное напряжение.
+                        </p>
+
+                        <button class="mode-more" type="button" aria-expanded="false">
+                            <span class="mode-more-label">Показать больше</span>
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </span>
+                        </button>
+
+                        <p class="mode-extra">
+                            Собирай экипировку, выбирай момент для атаки
+                            и докажи, что достоин остаться последним.
+                        </p>
+
+                        <button class="mode-cta" type="button" disabled>Скоро</button>
+                    </article>
+
+
+                    <article class="mode is-soon reveal">
+                        <div class="mode-visual">
+                            <img class="mode-image"
+                                 data-mode-image="survival"
+                                 alt="Выживание">
+                            <span class="mode-image-fallback">LC</span>
+                        </div>
+
+                        <div class="mode-head">
+                            <h3>Выживание</h3>
+                            <span class="mode-status">Скоро</span>
+                        </div>
+
+                        <p>
+                            Собирай ресурсы, развивай убежище и проходи
+                            путь от первых инструментов до большой базы.
+                        </p>
+
+                        <button class="mode-more" type="button" aria-expanded="false">
+                            <span class="mode-more-label">Показать больше</span>
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </span>
+                        </button>
+
+                        <p class="mode-extra">
+                            Спокойный темп, совместное развитие и сезонные
+                            цели для игроков, которым важен долгий прогресс.
+                        </p>
+
+                        <button class="mode-cta" type="button" disabled>Скоро</button>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             GAMEPLAY
+             ===================================================== -->
+
+        <section class="section gameplay">
+            <div class="container">
+
+                <div class="gameplay-grid">
+
+                    <div class="reveal">
+
+                        <div class="section-kicker">Игровой процесс</div>
+
+                        <h2 class="section-title">
+                            Мир, в котором
+                            важны решения.
+                        </h2>
+
+                        <p class="section-description">
+                            Начни практически с нуля, найди свой путь
+                            и преврати небольшой дом в настоящую базу.
+                        </p>
+
+                        <div class="bullet-list">
+
+                            <div class="bullet">
+                                <div class="bullet-check">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m5 12 4 4L19 6"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>Свободное развитие</strong>
+                                    <span>
+                                        Никаких обязательных маршрутов.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="bullet">
+                                <div class="bullet-check">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m5 12 4 4L19 6"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>PvP и рейды</strong>
+                                    <span>
+                                        Защищай своё или рискуй ради чужого.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="bullet">
+                                <div class="bullet-check">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m5 12 4 4L19 6"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>Торговля</strong>
+                                    <span>
+                                        Создавай собственную экономическую империю.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="bullet">
+                                <div class="bullet-check">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m5 12 4 4L19 6"/>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>Сезоны</strong>
+                                    <span>
+                                        Мир постоянно развивается и получает новый контент.
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard reveal">
+
+                        <div class="dash-head">
+                                <div class="dash-title">
+                                    <span class="dash-brand">
+                                        <img src="logo.png" alt="LastCube">
+                                        LastCube Network
+                                    </span>
+                                </div>
+
+                            <div class="dash-meta" id="legacyDashStatus">
+                                Проверка статуса…
+                            </div>
+
+                        </div>
+
+                        <div class="dash-main">
+
+                            <div class="dash-main-label">
+                                Игроки онлайн
+                            </div>
+
+                            <div class="dash-online legacy-dash-online" id="legacyDashPlayersOnline">
+                                <span id="legacyDashOnlineCount">—</span>
+                                <span id="legacyDashPlayersMax">/ —</span>
+                            </div>
+
+                            <div class="legacy-bar">
+                                <i></i>
+                            </div>
+
+                        </div>
+
+                        <div class="dash-grid">
+
+                            <div class="dash-box">
+                                <small>Статус</small>
+                                <strong id="legacyDashServerStatus">Проверка…</strong>
+                            </div>
+
+                            <div class="dash-box">
+                                <small>Пинг</small>
+                                <strong id="legacyDashPing">—</strong>
+                            </div>
+
+                            <div class="dash-box">
+                                <small>Версия</small>
+                                <strong id="legacyDashVersion">—</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             HOW TO PLAY
+             ===================================================== -->
+
+        <section class="section steps" id="legacy-how">
+            <div class="container">
+
+                <div class="section-header reveal">
+                    <div class="section-kicker">Подключение</div>
+
+                    <h2 class="section-title">
+                        До игры —<br>
+                        меньше минуты.
+                    </h2>
+
+                    <p class="section-description">
+                        LastCube работает на Minecraft Bedrock Edition.
+                        Добавь сервер и заходи в игру.
+                    </p>
+                </div>
+
+
+                <div class="steps-grid">
+
+                    <article class="step reveal">
+                        <div class="step-number">01</div>
+                        <h3>Открой Minecraft</h3>
+                        <p>
+                            Запусти Minecraft Bedrock Edition
+                            на телефоне, ПК или консоли.
+                        </p>
+                    </article>
+
+
+                    <article class="step reveal">
+                        <div class="step-number">02</div>
+                        <h3>Добавь сервер</h3>
+                        <p>
+                            Открой раздел серверов и выбери
+                            «Добавить сервер».
+                        </p>
+                    </article>
+
+
+                    <article class="step reveal">
+                        <div class="step-number">03</div>
+                        <h3>Заходи</h3>
+                        <p>
+                            Введи адрес LastCube, подключись
+                            и начинай свой путь.
+                        </p>
+                    </article>
+
+                </div>
+
+
+                <div class="connect-box reveal">
+
+                    <div class="connect-info">
+                        <small>IP адрес сервера</small>
+                        <code>play.lastcube.net:19132</code>
+                    </div>
+
+                    <button class="btn btn-primary"
+                            data-copy="play.lastcube.net:19132">
+                        Скопировать IP
+                    </button>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             PLAY HUB
+             ===================================================== -->
+
+        <section class="section play-hub" id="how">
+            <div class="container">
+
+                <div class="play-hub-grid">
+
+                    <aside class="play-social-panel reveal" id="community">
+                        <div class="section-kicker">Наше сообщество</div>
+
+                        <h2>Будь в центре событий.</h2>
+
+                        <p>
+                            Новости, помощь и новые знакомства собраны
+                            в наших главных каналах.
+                        </p>
+
+                        <div class="play-social-list">
+
+                            <a class="play-social-link"
+                               href="https://t.me/lastcube"
+                               target="_blank"
+                               rel="noopener">
+                                <span class="play-social-icon">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="m21 4-3 16-6-5-3 3-1-5-5-2 18-7Z"/>
+                                            <path d="m9 13 7-6"/>
+                                        </svg>
+                                    </span>
+                                </span>
+                                <span>
+                                    <strong>Telegram</strong>
+                                    <span>Новости и обновления</span>
+                                </span>
+                            </a>
+
+                            <a class="play-social-link"
+                               href="https://discord.gg/lastcube"
+                               target="_blank"
+                               rel="noopener">
+                                <span class="play-social-icon">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M8 19c-3-1-4-4-4-8 1-3 3-5 6-6l2 3 2-3c3 1 5 3 6 6 0 4-1 7-4 8"/>
+                                            <path d="M8 16c2 1 6 1 8 0"/>
+                                            <circle cx="9" cy="12" r="1"/>
+                                            <circle cx="15" cy="12" r="1"/>
+                                        </svg>
+                                    </span>
+                                </span>
+                                <span>
+                                    <strong>Discord</strong>
+                                    <span>Чат игроков и поддержка</span>
+                                </span>
+                            </a>
+
+                            <a class="play-social-link"
+                               href="mailto:support@lastcube.ru">
+                                <span class="play-social-icon">
+                                    <span class="icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                            <path d="m4 7 8 6 8-6"/>
+                                        </svg>
+                                    </span>
+                                </span>
+                                <span>
+                                    <strong>Поддержка</strong>
+                                    <span>support@lastcube.ru</span>
+                                </span>
+                            </a>
+
+                        </div>
+                    </aside>
+
+
+                    <div class="play-tools">
+
+                        <article class="guide-card reveal">
+                            <div class="section-kicker">Подключение</div>
+
+                            <div class="guide-head">
+                                <div>
+                                    <h2>Как зайти на LastCube?</h2>
+                                    <p>Три простых шага до игры</p>
+                                </div>
+                                <div class="guide-mark">
+                                    <img src="logo.png" alt="LastCube">
+                                </div>
+                            </div>
+
+                            <div class="guide-steps">
+
+                                <article class="guide-step">
+                                    <div class="guide-step-media">
+                                        <img data-guide-image="stepOne"
+                                             alt="Открой Minecraft">
+                                        <span>01</span>
+                                    </div>
+                                    <h3>Открой Minecraft</h3>
+                                    <p>
+                                        Запусти Minecraft Bedrock на телефоне,
+                                        ПК или консоли.
+                                    </p>
+                                </article>
+
+                                <article class="guide-step">
+                                    <div class="guide-step-media">
+                                        <img data-guide-image="stepTwo"
+                                             alt="Добавь сервер">
+                                        <span>02</span>
+                                    </div>
+                                    <h3>Добавь сервер</h3>
+                                    <p>
+                                        Открой раздел серверов и выбери
+                                        «Добавить сервер».
+                                    </p>
+                                </article>
+
+                                <article class="guide-step">
+                                    <div class="guide-step-media">
+                                        <img data-guide-image="stepThree"
+                                             alt="Подключись к LastCube">
+                                        <span>03</span>
+                                    </div>
+                                    <h3>Введи данные</h3>
+                                    <p>
+                                        Укажи IP и порт LastCube, затем
+                                        подключись к серверу.
+                                    </p>
+                                </article>
+
+                            </div>
+
+                            <div class="play-connect">
+                                <div class="connect-info">
+                                    <small>IP адрес сервера</small>
+                                    <code>play.lastcube.net:19132</code>
+                                </div>
+
+                                <button class="btn btn-primary"
+                                        data-copy="play.lastcube.net:19132">
+                                    Скопировать IP
+                                </button>
+                            </div>
+                        </article>
+
+
+                        <div class="dashboard reveal">
+
+                            <div class="dash-head">
+                                <div class="dash-title">
+                                    <span class="dash-brand">
+                                        <img src="logo.png" alt="LastCube">
+                                        LastCube Network
+                                    </span>
+                                </div>
+                                <div class="dash-meta" id="dashStatus">
+                                    Проверка статуса…
+                                </div>
+                            </div>
+
+                            <div class="dash-main">
+                                <div class="dash-main-label">Игроки онлайн</div>
+
+                                <div class="dash-online" id="dashPlayersOnline">
+                                    <span id="dashOnlineCount">—</span>
+                                    <span id="dashPlayersMax">/ —</span>
+                                </div>
+
+                                <div class="bar">
+                                    <i></i>
+                                </div>
+                            </div>
+
+                            <div class="dash-grid">
+                                <div class="dash-box">
+                                    <small>Статус</small>
+                                    <strong id="dashServerStatus">Проверка…</strong>
+                                </div>
+
+                                <div class="dash-box">
+                                    <small>Пинг API</small>
+                                    <strong id="dashPing">—</strong>
+                                </div>
+
+                                <div class="dash-box">
+                                    <small>Версия</small>
+                                    <strong id="dashVersion">—</strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             STORE
+             ===================================================== -->
+
+        <section class="store">
+            <div class="container">
+
+                <div class="store-card reveal">
+
+                    <div class="store-copy">
+
+                        <div class="section-kicker">
+                            LastCube Store
+                        </div>
+
+                        <h2>
+                            Усиль свой<br>
+                            игровой опыт.
+                        </h2>
+
+                        <p>
+                            Поддержи развитие сервера и получи
+                            дополнительные возможности в игре.
+                            Все покупки проходят через официальный магазин.
+                        </p>
+
+                    </div>
+
+                    <div class="store-action">
+
+                        <a href="https://store.lastcube.net/"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener">
+
+                            Открыть магазин
+
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M5 12h14"/>
+                                    <path d="m13 6 6 6-6 6"/>
+                                </svg>
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             COMMUNITY
+             ===================================================== -->
+
+        <section class="section community" id="legacy-community">
+            <div class="container">
+
+                <div class="section-header reveal">
+                    <div class="section-kicker">Сообщество</div>
+
+                    <h2 class="section-title">
+                        Будь в центре
+                        событий.
+                    </h2>
+
+                    <p class="section-description">
+                        Следи за обновлениями, участвуй в обсуждениях
+                        и общайся с другими игроками LastCube.
+                    </p>
+                </div>
+
+
+                <div class="social-grid">
+
+                    <a class="social reveal"
+                       href="https://t.me/lastcube"
+                       target="_blank"
+                       rel="noopener">
+
+                        <div class="social-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="m21 4-3 16-6-5-3 3-1-5-5-2 18-7Z"/>
+                                    <path d="m9 13 7-6"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>Telegram</strong>
+                            <span>Новости и обновления</span>
+                        </div>
+
+                    </a>
+
+
+                    <a class="social reveal"
+                       href="https://discord.gg/lastcube"
+                       target="_blank"
+                       rel="noopener">
+
+                        <div class="social-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M8 19c-3-1-4-4-4-8 1-3 3-5 6-6l2 3 2-3c3 1 5 3 6 6 0 4-1 7-4 8"/>
+                                    <path d="M8 16c2 1 6 1 8 0"/>
+                                    <circle cx="9" cy="12" r="1"/>
+                                    <circle cx="15" cy="12" r="1"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>Discord</strong>
+                            <span>Чат игроков и поддержка</span>
+                        </div>
+
+                    </a>
+
+
+                    <a class="social reveal"
+                       href="mailto:support@lastcube.ru">
+
+                        <div class="social-icon">
+                            <span class="icon">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                    <path d="m4 7 8 6 8-6"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>Поддержка</strong>
+                            <span>support@lastcube.ru</span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             FAQ
+             ===================================================== -->
+
+        <section class="section faq" id="faq">
+            <div class="container">
+
+                <div class="section-header reveal" style="margin-inline:auto;text-align:center;">
+                    <div class="section-kicker">FAQ</div>
+
+                    <h2 class="section-title">
+                        Остались вопросы?
+                    </h2>
+
+                    <p class="section-description">
+                        Здесь собрали ответы на самые частые вопросы.
+                    </p>
+                </div>
+
+
+                <div class="faq-list">
+
+                    <div class="faq-item reveal">
+
+                        <button class="faq-question">
+                            <span>На какой версии Minecraft работает сервер?</span>
+                            <span class="faq-plus">+</span>
+                        </button>
+
+                        <div class="faq-answer">
+                            <p>
+                                LastCube рассчитан на Minecraft Bedrock Edition.
+                                Актуальную поддерживаемую версию рекомендуется
+                                проверять в официальных каналах проекта.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="faq-item reveal">
+
+                        <button class="faq-question">
+                            <span>Можно ли играть с телефона?</span>
+                            <span class="faq-plus">+</span>
+                        </button>
+
+                        <div class="faq-answer">
+                            <p>
+                                Да. Сервер ориентирован на Bedrock Edition,
+                                поэтому к нему можно подключаться с совместимых
+                                устройств, включая мобильные платформы.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="faq-item reveal">
+
+                        <button class="faq-question">
+                            <span>Можно ли играть с друзьями?</span>
+                            <span class="faq-plus">+</span>
+                        </button>
+
+                        <div class="faq-answer">
+                            <p>
+                                Конечно. Выбирай подходящий режим и создавай
+                                команду вместе с друзьями.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="faq-item reveal">
+
+                        <button class="faq-question">
+                            <span>Где получить помощь?</span>
+                            <span class="faq-plus">+</span>
+                        </button>
+
+                        <div class="faq-answer">
+                            <p>
+                                Используй Telegram, Discord или электронную
+                                почту поддержки. Ссылки находятся в разделе
+                                «Сообщество» выше.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="faq-item reveal">
+
+                        <button class="faq-question">
+                            <span>Где находится магазин?</span>
+                            <span class="faq-plus">+</span>
+                        </button>
+
+                        <div class="faq-answer">
+                            <p>
+                                Нажми кнопку «Магазин» в верхней части сайта
+                                или воспользуйся большим блоком магазина выше.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-main">
+
+                <div class="footer-brand">
+
+                    <div class="brand">
+                        <span class="brand-mark">
+                            <img src="logo.png" alt="LastCube">
+                        </span>
+
+                        <span>
+                            <span class="brand-name">LastCube</span>
+                            <span class="brand-sub">Bedrock Network</span>
+                        </span>
+                    </div>
+
+                    <p class="footer-description">
+                        Minecraft Bedrock сервер с собственной атмосферой,
+                        режимами и игровыми механиками.
+                    </p>
+
+                </div>
+
+
+                <div class="footer-links">
+
+                    <div class="footer-col">
+                        <strong>Навигация</strong>
+                        <a href="#how">Как играть</a>
+                        <a href="#faq">FAQ</a>
+                    </div>
+
+
+                    <div class="footer-col">
+                        <strong>Сообщество</strong>
+                        <a href="https://t.me/lastcube_new"
+                           target="_blank"
+                           rel="noopener">
+                            Telegram
+                        </a>
+                        <a href="https://discord.gg/lastcube"
+                           target="_blank"
+                           rel="noopener">
+                            Discord
+                        </a>
+                        <a href="mailto:support@lastcube.ru">
+                            Поддержка
+                        </a>
+                    </div>
+
+
+                    <div class="footer-col">
+                        <strong>Сервер</strong>
+                        <a href="#how">IP: play.lastcube.net</a>
+                        <a href="#how">PORT: 19132</a>
+                        <a href="https://store.lastcube.net/"
+                           target="_blank"
+                           rel="noopener">
+                            Магазин
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © 2026 LastCube. Все права защищены.
+                </span>
+
+                <span>
+                    Created by the grnv-dev.ru team.
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================================
+         TOAST
+         ========================================================= -->
+
+    <div class="toast" id="toast">
+        IP скопирован
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+
+    <script>
+
+        /* =====================================================
+           MOBILE MENU
+           ===================================================== */
+
+        const mobileToggle = document.getElementById("mobileToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        mobileToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("open");
+        });
+
+        document.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("open");
+            });
+        });
+
+
+        /* =====================================================
+           HEADER SCROLL
+           ===================================================== */
+
+        const header = document.getElementById("header");
+
+        function updateHeader() {
+            if (window.scrollY > 20) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+        }
+
+        window.addEventListener("scroll", updateHeader, {
+            passive: true
+        });
+
+        updateHeader();
+
+
+        /* =====================================================
+           COPY TO CLIPBOARD
+           ===================================================== */
+
+        const toast = document.getElementById("toast");
+        let toastTimer;
+
+        function showToast(text) {
+            toast.textContent = text;
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2200);
+        }
+
+        async function copyText(text) {
+
+            try {
+
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+
+                    const textarea = document.createElement("textarea");
+
+                    textarea.value = text;
+                    textarea.style.position = "fixed";
+                    textarea.style.opacity = "0";
+
+                    document.body.appendChild(textarea);
+
+                    textarea.select();
+                    document.execCommand("copy");
+
+                    textarea.remove();
+                }
+
+                showToast("IP скопирован: " + text);
+
+            } catch (error) {
+
+                showToast("Не удалось скопировать IP");
+
+            }
+        }
+
+        document.querySelectorAll("[data-copy]").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const value = button.dataset.copy;
+
+                copyText(value);
+
+            });
+
+        });
+
+
+        const lastcubeAssets = {
+            modes: {
+                anarchy: "mode-anarchy.png",
+                meatgrinder: "mode-meatgrinder.png",
+                survival: "mode-survival.png"
+            },
+            guide: {
+                stepOne: "guide-step-1.png",
+                stepTwo: "guide-step-2.png",
+                stepThree: "guide-step-3.png"
+            }
+        };
+
+        window.lastcubeAssets = lastcubeAssets;
+
+        function loadOptionalImages(selector, sources, dataKey) {
+            document.querySelectorAll(selector).forEach(image => {
+                const source = sources[image.dataset[dataKey]];
+
+                if (!source) return;
+
+                image.addEventListener("load", () => {
+                    image.classList.add("loaded");
+                }, { once: true });
+
+                image.addEventListener("error", () => {
+                    image.removeAttribute("src");
+                }, { once: true });
+
+                image.src = source;
+            });
+        }
+
+        loadOptionalImages("[data-mode-image]", lastcubeAssets.modes, "modeImage");
+        loadOptionalImages("[data-guide-image]", lastcubeAssets.guide, "guideImage");
+
+        document.querySelectorAll(".mode-more").forEach(button => {
+            button.addEventListener("click", () => {
+                const mode = button.closest(".mode");
+                const expanded = mode.classList.toggle("expanded");
+                const label = button.querySelector(".mode-more-label");
+
+                button.setAttribute("aria-expanded", String(expanded));
+                label.textContent = expanded
+                    ? "Скрыть"
+                    : "Показать больше";
+            });
+        });
+
+
+        /* =====================================================
+           FAQ
+           ===================================================== */
+
+        document.querySelectorAll(".faq-question").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const item = button.closest(".faq-item");
+                const answer = item.querySelector(".faq-answer");
+
+                const active = item.classList.contains("active");
+
+                document.querySelectorAll(".faq-item.active").forEach(other => {
+
+                    if (other !== item) {
+
+                        other.classList.remove("active");
+
+                        const otherAnswer =
+                            other.querySelector(".faq-answer");
+
+                        otherAnswer.style.maxHeight = null;
+                    }
+
+                });
+
+                if (active) {
+
+                    item.classList.remove("active");
+                    answer.style.maxHeight = null;
+
+                } else {
+
+                    item.classList.add("active");
+                    answer.style.maxHeight =
+                        answer.scrollHeight + "px";
+
+                }
+
+            });
+
+        });
+
+
+        /* =====================================================
+           SCROLL REVEAL
+           ===================================================== */
+
+        const revealElements =
+            document.querySelectorAll(".reveal");
+
+        const revealObserver =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target.classList.add("visible");
+
+                            revealObserver.unobserve(entry.target);
+
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: .12
+                }
+            );
+
+        revealElements.forEach(element => {
+            revealObserver.observe(element);
+        });
+
+
+        /* =====================================================
+           SMOOTH ANCHOR OFFSET
+           ===================================================== */
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+
+            link.addEventListener("click", event => {
+
+                const targetId = link.getAttribute("href");
+
+                if (targetId === "#") return;
+
+                const target =
+                    document.querySelector(targetId);
+
+                if (!target) return;
+
+                event.preventDefault();
+
+                const headerHeight =
+                    document.querySelector(".header")
+                        .getBoundingClientRect()
+                        .height;
+
+                const targetTop =
+                    target.getBoundingClientRect().top +
+                    window.scrollY -
+                    headerHeight -
+                    25;
+
+                window.scrollTo({
+                    top: targetTop,
+                    behavior: "smooth"
+                });
+
+            });
+
+        });
+
+
+        /* =====================================================
+           LIVE SERVER STATUS
+           ===================================================== */
+
+        const serverAddress = "d21.aurorix.net:25956";
+        const statusEndpoint =
+            "https://api.mcstatus.io/v2/status/bedrock/" +
+            serverAddress;
+
+        const dashboardStatus = document.getElementById("dashStatus");
+        const dashboardOnlineCount =
+            document.getElementById("dashOnlineCount");
+        const dashboardMaxPlayers =
+            document.getElementById("dashPlayersMax");
+        const dashboardBar = document.querySelector(".bar i");
+        const dashboardServerStatus =
+            document.getElementById("dashServerStatus");
+        const dashboardPing = document.getElementById("dashPing");
+        const dashboardVersion = document.getElementById("dashVersion");
+        const modesLiveCount = document.getElementById("modesLiveCount");
+
+        function setServerStatus(data, requestTime) {
+            const online = data.online === true;
+            const players = data.players || {};
+            const onlinePlayers = Number.isFinite(players.online)
+                ? players.online
+                : 0;
+            const maxPlayers = Number.isFinite(players.max)
+                ? players.max
+                : 0;
+            const version = data.version && data.version.name
+                ? data.version.name
+                : "—";
+            const percent = maxPlayers > 0
+                ? Math.min((onlinePlayers / maxPlayers) * 100, 100)
+                : 0;
+
+            dashboardStatus.textContent = online
+                ? "Статус получен"
+                : "Сервер недоступен";
+            dashboardOnlineCount.textContent = onlinePlayers;
+            dashboardMaxPlayers.textContent = "/ " + maxPlayers;
+            dashboardBar.style.width = percent + "%";
+            dashboardServerStatus.textContent = online
+                ? "Онлайн"
+                : "Оффлайн";
+            dashboardPing.textContent = Math.max(1, Math.round(requestTime)) + " ms";
+            dashboardVersion.textContent = version;
+
+            if (modesLiveCount) {
+                modesLiveCount.textContent = online
+                    ? onlinePlayers + " игроков онлайн"
+                    : "Сервер недоступен";
+            }
+        }
+
+        function setServerError() {
+            dashboardStatus.textContent = "Не удалось получить данные";
+            dashboardOnlineCount.textContent = "—";
+            dashboardMaxPlayers.textContent = "/ —";
+            dashboardBar.style.width = "0%";
+            dashboardServerStatus.textContent = "Нет данных";
+            dashboardPing.textContent = "—";
+            dashboardVersion.textContent = "—";
+
+            if (modesLiveCount) {
+                modesLiveCount.textContent = "Статус недоступен";
+            }
+        }
+
+        async function updateServerStatus() {
+            const startedAt = performance.now();
+
+            try {
+                const response = await fetch(statusEndpoint, {
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Status API request failed");
+                }
+
+                const data = await response.json();
+                setServerStatus(data, performance.now() - startedAt);
+            } catch (error) {
+                setServerError();
+            }
+        }
+
+        updateServerStatus();
+        setInterval(updateServerStatus, 60000);
+
+
+        /* =====================================================
+           YEAR
+           ===================================================== */
+
+        document.querySelectorAll(".footer-bottom").forEach(footer => {
+
+            footer.innerHTML =
+                footer.innerHTML.replace(
+                    "2026",
+                    new Date().getFullYear()
+                );
+
+        });
+
+    </script>
+
+</body>
+</html>
